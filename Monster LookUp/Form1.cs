@@ -168,9 +168,9 @@ namespace Monster_LookUp
                     {
                         while (monsterInfo.Read())
                         {
-                            if (monsterInfo["image"] != null && !Convert.IsDBNull(monsterInfo["image"]))
+                            if (monsterInfo["description"] != null && !Convert.IsDBNull(monsterInfo["description"]))
                             {
-                                description = (string)monsterInfo["image"];
+                                description = (string)monsterInfo["description"];
                             }
                         }
                     }
@@ -194,8 +194,8 @@ namespace Monster_LookUp
             {
                 pictureBox1.Image = null;
             }
-            
 
+            descriptionBox.Text = GrabMonsterDescription("SELECT description FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
         }
     }
 }
