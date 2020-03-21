@@ -11,6 +11,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Monster_LookUp
 {
@@ -31,9 +32,31 @@ namespace Monster_LookUp
 
         string monsterNameQuery;
 
+        SQLiteDataReader monsterInfo;
+        DataTable table;
+
+        int entityCount;
+
+        string relevantQueryActionFirstHalf = "CREATE TEMPORARY TABLE backActions(actionName, charges, chargeRefreshRate, actionDescription);" + "INSERT INTO backActions SELECT actionName, charges, chargeRefreshRate, actionDescription FROM monsters_actions WHERE monsterName='";
+        string relevantQueryActionSecondHalf = "SELECT * FROM backActions;";
+
+        string rowIdSelectorFirstHalf = "SELECT * FROM backActions WHERE rowid = ";
+
+        Font bold = new Font("Arial",24,FontStyle.Bold);
+
+        List<CheckBox> sizeBoxes = new List<CheckBox>();
+
         public Form1()
         {
             InitializeComponent();
+
+            sizeListBox.SetItemChecked(0, true);
+            sizeListBox.SetItemChecked(1, true);
+            sizeListBox.SetItemChecked(2, true);
+            sizeListBox.SetItemChecked(3, true);
+            sizeListBox.SetItemChecked(4, true);
+            sizeListBox.SetItemChecked(5, true);
+            sizeListBox.SetItemChecked(6, true);
 
             fullQuery = createTempTableString + insertIntoTempTableString + mainQueryString + textBoxString + dropTableString;
 
@@ -45,6 +68,7 @@ namespace Monster_LookUp
 
             
             GetData(QueryCompiler());
+
 
             dataGridView1.Columns[0].Width = 100;
             dataGridView1.Columns[1].Width = 100;
@@ -62,38 +86,44 @@ namespace Monster_LookUp
             mainQueryString = "SELECT monsterName, challengeRating, armorClass, hitpointAverage, monsterType, size FROM backMonsters WHERE monsterName LIKE ";
             textBoxString = "'" + textBox1.Text + "%'";
 
-            if (monsterSizes.Text == "Tiny")
-            {
-                additionalString += " AND size = 'Tiny'";
-            }
-            if (monsterSizes.Text == "Small")
-            {
-                additionalString += " AND size = 'Small'";
-            }
-            if (monsterSizes.Text == "Medium")
-            {
-                additionalString += " AND size = 'Medium'";
-            }
-            if (monsterSizes.Text == "Large")
-            {
-                additionalString += " AND size = 'Large'";
-            }
-            if (monsterSizes.Text == "Huge")
-            {
-                additionalString += " AND size = 'Huge'";
-            }
-            if (monsterSizes.Text == "Gargantuan")
-            {
-                additionalString += " AND size = 'Gargantuan'";
-            }
-            if (monsterSizes.Text == "Colossal")
-            {
-                additionalString += " AND size = 'Colosssal'";
-            }
+            additionalString += createSizeStringConditional(additionalString);
+
             additionalString += ";";
             dropTableString = "DROP TABLE backMonsters;";
 
-             return fullQuery = createTempTableString + insertIntoTempTableString + mainQueryString + textBoxString + additionalString + dropTableString;
+            Debug.WriteLine(createTempTableString + insertIntoTempTableString + mainQueryString + textBoxString + additionalString + dropTableString);
+
+            return fullQuery = createTempTableString + insertIntoTempTableString + mainQueryString + textBoxString + additionalString + dropTableString;
+            
+        }
+        private string createSizeStringConditional(string sizeString)
+        {
+            if (sizeListBox.CheckedItems.Count != 0)
+            {
+                int secondaryIndex = 0;
+                for (int primaryIndex = 0; primaryIndex < sizeListBox.Items.Count; primaryIndex++)
+                {
+                    if (sizeListBox.GetItemChecked(primaryIndex) == true)
+                    {
+                        if (secondaryIndex == 0)
+                        {
+                            sizeString += " AND (";
+                            sizeString += "size = '" + sizeListBox.Items.IndexOf(primaryIndex) as string + "'";
+                            secondaryIndex++;
+                        }
+                        if (secondaryIndex > 0)
+                        {
+                            sizeString += " OR size = '" + sizeListBox.Items.IndexOf(primaryIndex) as string + "'";
+                            if (primaryIndex == sizeListBox.CheckedItems.Count)
+                            {
+                                sizeString += ")";
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return sizeString;
         }
         private void GetData(string selectCommand)
         {
@@ -127,63 +157,59 @@ namespace Monster_LookUp
 
             }
         }
-        private Byte[] GrabMonsterImage(string selectCommand)
+        
+        private object GrabMonsterData_OnClick(string column)
         {
-            Byte[] image = null;
-            SQLiteDataReader monsterInfo;
-            String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(selectCommand, connection))
+            object returnObject = null;
+                if (column == "image")
                 {
-                    using (monsterInfo = command.ExecuteReader())
-                    {
-                        while (monsterInfo.Read())
-                        {
-                            if (monsterInfo["image"] != null && !Convert.IsDBNull(monsterInfo["image"]))
-                            {
-                                image = (Byte[])monsterInfo["image"];
-                            }
-                        }
-                    }
+                    returnObject = (Byte[])monsterInfo["image"];
                 }
-                connection.Close();
-            }
-            return image;
-        }
-        private string GrabMonsterDescription(string selectCommand)
-        {
-            string description = "";
-            SQLiteDataReader monsterInfo;
-            String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(selectCommand, connection))
+                else if (column == "action")
                 {
-                    using (monsterInfo = command.ExecuteReader())
+                    string str = "";
+                    str += (string)monsterInfo["actionName"];
+                    if (monsterInfo["charges"] != DBNull.Value)
                     {
-                        while (monsterInfo.Read())
-                        {
-                            if (monsterInfo["description"] != null && !Convert.IsDBNull(monsterInfo["description"]))
-                            {
-                                description = (string)monsterInfo["description"];
-                            }
-                        }
+                        str += (string)monsterInfo["charges"];
                     }
+                    if (monsterInfo["chargeRefreshRate"] != DBNull.Value)
+                    {
+                        str += (string)monsterInfo["chargeRefreshRate"];
+                    }
+                    str += (string)monsterInfo["actionDescription"];
+                    returnObject = str;
                 }
-                connection.Close();
-            }
-            return description;
+                else
+                {
+                    returnObject = (string)monsterInfo[column];
+                }
+            return returnObject;
         }
         private void dataGridView1_CellClick_PopulateMonsterData(object sender, DataGridViewCellEventArgs e)
         {
-            monsterNameQuery = dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value.ToString();
+            foreach(Control rtf in this.Controls)
+            {
+                if (rtf is RichTextBox)
+                {
+                    RichTextBox rich = (RichTextBox)rtf;
+                    rich.ScrollToCaret();
+                }
+            }
 
-            Byte[] data = GrabMonsterImage("SELECT image FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
+            String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
+
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+
+            table = new DataTable();
+
+            monsterNameQuery = dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value.ToString();
+            SQLiteCommand command = new SQLiteCommand("SELECT image FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
+            command.Connection = connection;
+            connection.Open();
+            monsterInfo = command.ExecuteReader();
+            monsterInfo.Read();
+            Byte[] data = (Byte[])GrabMonsterData_OnClick("image");
             MemoryStream mem = new MemoryStream();
             if (data != null)
             {
@@ -195,7 +221,49 @@ namespace Monster_LookUp
                 pictureBox1.Image = null;
             }
 
-            descriptionBox.Text = GrabMonsterDescription("SELECT description FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
+            command = new SQLiteCommand("SELECT description FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
+
+            command.Connection = connection;
+            monsterInfo = command.ExecuteReader();
+            monsterInfo.Read();
+            descriptionBox.Rtf = (string)GrabMonsterData_OnClick("description");
+
+            command = new SQLiteCommand("SELECT extras FROM monsters WHERE monsterName='" + monsterNameQuery + "'");
+            command.Connection = connection;
+            monsterInfo = command.ExecuteReader();
+            monsterInfo.Read();
+            extrasBox.Rtf = (string)GrabMonsterData_OnClick("extras");
+
+            //entityCount = 0;
+            //entityCount = EntityCounter(relevantQueryActionFirstHalf + monsterNameQuery + "';", "backActions;");
+            actionsBox.Clear();
+
+            /*command = new SQLiteCommand(relevantQueryActionFirstHalf + monsterNameQuery + "';" + relevantQueryActionSecondHalf + "DROP TABLE backActions");
+            command.Connection = connection;
+            monsterInfo = command.ExecuteReader();
+            for (int i = 0; i < 1000; i++)
+            {
+                monsterInfo.Read();
+                actionsBox.Text += (string)GrabMonsterData_OnClick("action");
+            }*/
+            connection.Close();
+        }
+        private int EntityCounter(string relevantQuery, string relevantTable)
+        {
+            int entityCount = 0;
+
+            String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
+
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+
+            connection.Open();
+
+            SQLiteCommand countCheck = new SQLiteCommand(relevantQuery + "SELECT COUNT (*) FROM " + relevantTable, connection);
+            entityCount = Convert.ToInt32(countCheck.ExecuteScalar());
+
+            connection.Close();
+
+            return entityCount;
         }
     }
 }
