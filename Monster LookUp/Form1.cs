@@ -22,7 +22,7 @@ namespace Monster_LookUp
         String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
 
         MonsterFilter monsterFilter;
-        List<Control> controls = new List<Control>();
+        TooltipHandler toolTipHandler;
 
         string mainQueryString;
         string textBoxString;
@@ -35,7 +35,11 @@ namespace Monster_LookUp
         public Form1()
         {
             InitializeComponent();
+
             monsterFilter = new MonsterFilter();
+            toolTipHandler = new TooltipHandler();
+
+            //pass the form's controls into the filters and tooltip classes for later manipulation
             foreach (Control control in Controls)
             {
                 if (control is CheckBox || control is RichTextBox)
@@ -43,15 +47,14 @@ namespace Monster_LookUp
                     monsterFilter.controls.Add(control);
                 }
             }
-            foreach(Control control in flowLayoutPanel1.Controls)
+            foreach(Control control in checklistBoxFlowPanel.Controls)
             {
                 monsterFilter.controls.Add(control);
+                toolTipHandler.controls.Add(control);
             }
-            InitializeToolTips();
+            toolTipHandler.InitializeTooltips();
 
             //initial result group, grab everything in the monster table
-            fullQuery = mainQueryString + textBoxString;
-
             TableUpdate(this, null);
         }
 
@@ -79,12 +82,11 @@ namespace Monster_LookUp
         //compile a query out of constituent parts. a main query, the textbox search bar, and an additional string that is appended with conditionals
         private string QueryCompiler()
         {
-            //first we clear the additional string for appending a new query later
             //set the main query to what will be displayed
             //then append the textbox string which will allow for searching anything plus what is currently typed in the box
-            additionalString = "";
             mainQueryString = "SELECT DISTINCT mons.monsterName, mons.challengeRating, mons.armorClass, mons.hitpointAverage, mons.monsterType, mons.size ";
-            secondaryQueryString = "FROM Monsters AS mons LEFT JOIN monsters_actions AS mons_actions ON mons_actions.monsterName = mons.monsterName " +
+            secondaryQueryString = "FROM Monsters AS mons " +
+                "LEFT JOIN monsters_actions AS mons_actions ON mons_actions.monsterName = mons.monsterName " +
                 "LEFT JOIN monsters_immunities AS mons_immunities ON mons_immunities.monsterName = mons.monstername " +
                 "LEFT JOIN monsters_resistances AS mons_resistances ON mons_resistances.monsterName = mons.monstername " +
                 "LEFT JOIN monsters_weaknesses AS mons_weak ON mons_weak.monsterName = mons.monstername " +
@@ -100,13 +102,6 @@ namespace Monster_LookUp
                 "LEFT JOIN challengeRatings AS mons_CRs ON mons_CRs.challengeRating = mons.challengeRating ";
 
             textBoxString = "WHERE mons.monsterName LIKE '" + textBox1.Text + "%'";
-
-            //process the addition string by passing it in for each different checkbox list
-
-            /*
-             * CHANGE THIS TO A ITERATING LIST LATER
-             * USE THE NAMES WHILE ITERATING TO PASS INTO THE CONDITIONAL METHOD
-             */
 
             additionalString = monsterFilter.ParseQuery();
 
@@ -263,44 +258,6 @@ namespace Monster_LookUp
             {
                 e.SuppressKeyPress = true;
             }
-        }
-        public void InitializeToolTips()
-        {
-            ToolTip sizeCheckListToolTip = new ToolTip();
-            ToolTip monsterSubtypeCheckListToolTip = new ToolTip();
-            ToolTip monsterTypeCheckListToolTip = new ToolTip();
-            ToolTip environmentCheckListToolTip = new ToolTip();
-            ToolTip alignmnetCheckListToolTip = new ToolTip();
-            ToolTip broadAlignmentCheckListToolTip = new ToolTip();
-            ToolTip actionCheckListToolTip = new ToolTip();
-            ToolTip traitCheckListToolTip = new ToolTip();
-            ToolTip skillCheckListToolTip = new ToolTip();
-            ToolTip senseCheckListToolTip = new ToolTip();
-            ToolTip legendaryCheckListToolTip = new ToolTip();
-            ToolTip moveTypeCheckListToolTip = new ToolTip();
-            ToolTip savingThrowCheckListToolTip = new ToolTip();
-            ToolTip langCheckListToolTip = new ToolTip();
-            ToolTip immunityCheckListToolTip = new ToolTip();
-            ToolTip resistanceCheckListToolTip = new ToolTip();
-            ToolTip weaknessCheckListToolTip = new ToolTip();
-
-            sizeCheckListToolTip.SetToolTip(sizeListBox, "Size Category");
-            monsterSubtypeCheckListToolTip.SetToolTip(monsterSubtypeCheckListBox, "Monster Subtype");
-            monsterTypeCheckListToolTip.SetToolTip(monsterTypeCheckBoxList, "Monster Type");
-            environmentCheckListToolTip.SetToolTip(environmentCheckListBox, "Environment");
-            alignmnetCheckListToolTip.SetToolTip(alignmentCheckListBox, "Alignment");
-            broadAlignmentCheckListToolTip.SetToolTip(broadAlignmentCheckListBox, "Broad Alignment");
-            actionCheckListToolTip.SetToolTip(actionCheckListBox, "Actions");
-            traitCheckListToolTip.SetToolTip(traitsCheckListBox, "Traits");
-            skillCheckListToolTip.SetToolTip(skillsCheckListBox, "Skills");
-            senseCheckListToolTip.SetToolTip(sensesCheckListBox, "Senses");
-            legendaryCheckListToolTip.SetToolTip(legendaryActCheckListBox, "Legendary Actions");
-            moveTypeCheckListToolTip.SetToolTip(moveTypeCheckListBox, "Movement Types");
-            savingThrowCheckListToolTip.SetToolTip(savingThrowCheckListBox, "Saving Throws");
-            langCheckListToolTip.SetToolTip(langCheckListBox, "Languages");
-            immunityCheckListToolTip.SetToolTip(immunityCheckListBox, "Immunities");
-            resistanceCheckListToolTip.SetToolTip(resistanceCheckListBox, "Resistances");
-            weaknessCheckListToolTip.SetToolTip(weaknessCheckListBox, "Weaknesses");
         }
     }
 }

@@ -48,7 +48,7 @@
             this.extrasBox = new System.Windows.Forms.RichTextBox();
             this.descriptionBox = new System.Windows.Forms.RichTextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checklistBoxFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.sizeListBox = new System.Windows.Forms.CheckedListBox();
             this.monsterTypeCheckBoxList = new System.Windows.Forms.CheckedListBox();
             this.monsterSubtypeCheckListBox = new System.Windows.Forms.CheckedListBox();
@@ -93,7 +93,7 @@
             this.ACmin = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.checklistBoxFlowPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -335,35 +335,36 @@
             this.label8.TabIndex = 23;
             this.label8.Text = "Description";
             // 
-            // flowLayoutPanel1
+            // checklistBoxFlowPanel
             // 
-            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Controls.Add(this.sizeListBox);
-            this.flowLayoutPanel1.Controls.Add(this.monsterTypeCheckBoxList);
-            this.flowLayoutPanel1.Controls.Add(this.monsterSubtypeCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.environmentCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.broadAlignmentCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.alignmentCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.actionCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.traitsCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.legendaryActCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.skillsCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.sensesCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.savingThrowCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.langCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.moveTypeCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.resistanceCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.immunityCheckListBox);
-            this.flowLayoutPanel1.Controls.Add(this.weaknessCheckListBox);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(16, 40);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(591, 132);
-            this.flowLayoutPanel1.TabIndex = 31;
-            this.flowLayoutPanel1.WrapContents = false;
+            this.checklistBoxFlowPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checklistBoxFlowPanel.AutoScroll = true;
+            this.checklistBoxFlowPanel.Controls.Add(this.sizeListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.monsterTypeCheckBoxList);
+            this.checklistBoxFlowPanel.Controls.Add(this.monsterSubtypeCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.environmentCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.broadAlignmentCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.alignmentCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.actionCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.traitsCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.legendaryActCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.skillsCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.sensesCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.savingThrowCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.langCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.moveTypeCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.resistanceCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.immunityCheckListBox);
+            this.checklistBoxFlowPanel.Controls.Add(this.weaknessCheckListBox);
+            this.checklistBoxFlowPanel.Location = new System.Drawing.Point(16, 40);
+            this.checklistBoxFlowPanel.Name = "checklistBoxFlowPanel";
+            this.checklistBoxFlowPanel.Size = new System.Drawing.Size(591, 132);
+            this.checklistBoxFlowPanel.TabIndex = 31;
+            this.checklistBoxFlowPanel.WrapContents = false;
             // 
             // sizeListBox
             // 
+            this.sizeListBox.AccessibleDescription = "Size Category";
             this.sizeListBox.AccessibleName = "mons.size";
             this.sizeListBox.CheckOnClick = true;
             this.sizeListBox.FormattingEnabled = true;
@@ -383,6 +384,7 @@
             // 
             // monsterTypeCheckBoxList
             // 
+            this.monsterTypeCheckBoxList.AccessibleDescription = "Monster Type";
             this.monsterTypeCheckBoxList.AccessibleName = "mons.monsterType";
             this.monsterTypeCheckBoxList.CheckOnClick = true;
             this.monsterTypeCheckBoxList.FormattingEnabled = true;
@@ -409,6 +411,7 @@
             // 
             // monsterSubtypeCheckListBox
             // 
+            this.monsterSubtypeCheckListBox.AccessibleDescription = "Monster Subtype";
             this.monsterSubtypeCheckListBox.AccessibleName = "mons.monsterSubtype";
             this.monsterSubtypeCheckListBox.CheckOnClick = true;
             this.monsterSubtypeCheckListBox.FormattingEnabled = true;
@@ -452,6 +455,7 @@
             // 
             // environmentCheckListBox
             // 
+            this.environmentCheckListBox.AccessibleDescription = "Environment";
             this.environmentCheckListBox.AccessibleName = "mons.environment";
             this.environmentCheckListBox.CheckOnClick = true;
             this.environmentCheckListBox.FormattingEnabled = true;
@@ -475,6 +479,7 @@
             // 
             // broadAlignmentCheckListBox
             // 
+            this.broadAlignmentCheckListBox.AccessibleDescription = "Broad Alignment";
             this.broadAlignmentCheckListBox.AccessibleName = "aligns.broadAlignment";
             this.broadAlignmentCheckListBox.CheckOnClick = true;
             this.broadAlignmentCheckListBox.FormattingEnabled = true;
@@ -491,6 +496,7 @@
             // 
             // alignmentCheckListBox
             // 
+            this.alignmentCheckListBox.AccessibleDescription = "Alignment";
             this.alignmentCheckListBox.AccessibleName = "mons.alignment";
             this.alignmentCheckListBox.CheckOnClick = true;
             this.alignmentCheckListBox.FormattingEnabled = true;
@@ -513,6 +519,7 @@
             // 
             // actionCheckListBox
             // 
+            this.actionCheckListBox.AccessibleDescription = "Actions";
             this.actionCheckListBox.AccessibleName = "mons_actions.actionName";
             this.actionCheckListBox.CheckOnClick = true;
             this.actionCheckListBox.FormattingEnabled = true;
@@ -539,6 +546,7 @@
             // 
             // traitsCheckListBox
             // 
+            this.traitsCheckListBox.AccessibleDescription = "Traits";
             this.traitsCheckListBox.AccessibleName = "mons_traits.traitName";
             this.traitsCheckListBox.CheckOnClick = true;
             this.traitsCheckListBox.FormattingEnabled = true;
@@ -562,6 +570,7 @@
             // 
             // legendaryActCheckListBox
             // 
+            this.legendaryActCheckListBox.AccessibleDescription = "Legendary Actions";
             this.legendaryActCheckListBox.AccessibleName = "mons_leg_acts.legendaryActionName";
             this.legendaryActCheckListBox.CheckOnClick = true;
             this.legendaryActCheckListBox.FormattingEnabled = true;
@@ -580,6 +589,7 @@
             // 
             // skillsCheckListBox
             // 
+            this.skillsCheckListBox.AccessibleDescription = "Skills";
             this.skillsCheckListBox.AccessibleName = "mons_skills.skillName";
             this.skillsCheckListBox.CheckOnClick = true;
             this.skillsCheckListBox.FormattingEnabled = true;
@@ -595,6 +605,7 @@
             // 
             // sensesCheckListBox
             // 
+            this.sensesCheckListBox.AccessibleDescription = "Senses";
             this.sensesCheckListBox.AccessibleName = "mons_senses.senseName";
             this.sensesCheckListBox.CheckOnClick = true;
             this.sensesCheckListBox.FormattingEnabled = true;
@@ -610,6 +621,7 @@
             // 
             // savingThrowCheckListBox
             // 
+            this.savingThrowCheckListBox.AccessibleDescription = "Saving Throws";
             this.savingThrowCheckListBox.AccessibleName = "mons_saving.ability_modifier";
             this.savingThrowCheckListBox.CheckOnClick = true;
             this.savingThrowCheckListBox.FormattingEnabled = true;
@@ -628,6 +640,7 @@
             // 
             // langCheckListBox
             // 
+            this.langCheckListBox.AccessibleDescription = "Languages";
             this.langCheckListBox.AccessibleName = "mons_langs.languageName";
             this.langCheckListBox.CheckOnClick = true;
             this.langCheckListBox.FormattingEnabled = true;
@@ -664,6 +677,7 @@
             // 
             // moveTypeCheckListBox
             // 
+            this.moveTypeCheckListBox.AccessibleDescription = "Movement Types";
             this.moveTypeCheckListBox.AccessibleName = "mons_movetypes.movementType";
             this.moveTypeCheckListBox.CheckOnClick = true;
             this.moveTypeCheckListBox.FormattingEnabled = true;
@@ -681,6 +695,7 @@
             // 
             // resistanceCheckListBox
             // 
+            this.resistanceCheckListBox.AccessibleDescription = "Resistances";
             this.resistanceCheckListBox.AccessibleName = "mons_resistances.source";
             this.resistanceCheckListBox.CheckOnClick = true;
             this.resistanceCheckListBox.FormattingEnabled = true;
@@ -707,6 +722,7 @@
             // 
             // immunityCheckListBox
             // 
+            this.immunityCheckListBox.AccessibleDescription = "Immunities";
             this.immunityCheckListBox.AccessibleName = "mons_immunities.source";
             this.immunityCheckListBox.CheckOnClick = true;
             this.immunityCheckListBox.FormattingEnabled = true;
@@ -748,6 +764,7 @@
             // 
             // weaknessCheckListBox
             // 
+            this.weaknessCheckListBox.AccessibleDescription = "Weaknesses";
             this.weaknessCheckListBox.AccessibleName = "mons_weak.source";
             this.weaknessCheckListBox.CheckOnClick = true;
             this.weaknessCheckListBox.FormattingEnabled = true;
@@ -1097,7 +1114,7 @@
             this.Controls.Add(this.maxEXP);
             this.Controls.Add(this.minEXP);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.checklistBoxFlowPanel);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.descriptionBox);
             this.Controls.Add(this.label7);
@@ -1122,7 +1139,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.checklistBoxFlowPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1150,7 +1167,7 @@
         private System.Windows.Forms.RichTextBox extrasBox;
         private System.Windows.Forms.RichTextBox descriptionBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel checklistBoxFlowPanel;
         private System.Windows.Forms.CheckedListBox sizeListBox;
         private System.Windows.Forms.CheckedListBox monsterTypeCheckBoxList;
         private System.Windows.Forms.CheckedListBox environmentCheckListBox;

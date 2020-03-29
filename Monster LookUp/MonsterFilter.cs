@@ -22,16 +22,20 @@ namespace Monster_LookUp
         {
             controls = new List<Control>();
         }
+
+        //returns a query to the main form by way of appending conditionals to the original query
         public string ParseQuery()
         {
             string additionalString = "";
             foreach (Control control in controls)
             {
-                additionalString += createCheckBoxListStringConditional(control);
+                additionalString += ControlChecker(control);
             }
 
             return additionalString;
         }
+
+        //clear all filter controls
         public void ClearAll()
         {
             foreach (Control control in controls)
@@ -56,7 +60,10 @@ namespace Monster_LookUp
                 }
             }
         }
-        string createCheckBoxListStringConditional(Control passedInControl)
+
+        //passes controls into itself to check the control's name, accessability description, and accessability name and uses those to determine
+        //flow of control as well as sql query appending
+        string ControlChecker(Control passedInControl)
         {
             /*
              * This block uses a second index (i2) outside of the looping index
