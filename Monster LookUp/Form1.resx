@@ -117,4 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="specialTraitsBox.AccessibleDescription" xml:space="preserve">
+    <value>SELECT DISTINCT mons_traits.traitName, mons_traits.traitDescription FROM monsters_traits as mons_traits LEFT JOIN monsters AS mons ON mons.monsterName = mons_traits.monsterName WHERE mons_traits.monsterName = </value>
+  </data>
+  <data name="actionsBox.AccessibleDescription" xml:space="preserve">
+    <value>SELECT DISTINCT mons_actions.actionName, mons_actions.charges, mons_actions.chargeRefreshRate, mons_actions.actionDescription FROM monsters_actions as mons_actions LEFT JOIN monsters AS mons ON mons.monsterName = mons_actions.monsterName WHERE mons_actions.monsterName = </value>
+  </data>
+  <data name="regionalEffectsBox.AccessibleDescription" xml:space="preserve">
+    <value>SELECT DISTINCT mons_lairs.regionalEffectsPreface, mons_lairs.regionalEffects, mons_lairs.extraRegionalStuff FROM monsters_lairs as mons_lairs LEFT JOIN monsters AS mons ON mons.monsterName = mons_lairs.monsterName WHERE mons_lairs.monsterName = </value>
+  </data>
+  <data name="legendaryActionsBox.AccessibleDescription" xml:space="preserve">
+    <value>SELECT DISTINCT mons_legActs.legendaryActionName, mons_legActs.legendaryActionDescription FROM monsters_legendaryActions AS mons_legActs LEFT JOIN monsters AS mons ON mons.monsterName = mons_legActs.monsterName WHERE mons_legActs.monsterName = </value>
+  </data>
+  <data name="lairActionsBox.AccessibleDescription" xml:space="preserve">
+    <value>SELECT DISTINCT mons_lairs.monsterLair, mons_lairs.lairPreface, mons_lairs.lairDescription, mons_lairs.lairActions FROM monsters_lairs as mons_lairs LEFT JOIN monsters AS mons ON mons.monsterName = mons_lairs.monsterName WHERE mons_lairs.monsterName = </value>
+  </data>
 </root>

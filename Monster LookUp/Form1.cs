@@ -17,34 +17,47 @@ namespace Monster_LookUp
 {
     public partial class Form1 : Form
     {
-        BindingSource bindingSource1 = new BindingSource();
-        SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter();
-        String connectionString = "Data Source=Monsters.db; Version = 3; New = True; Compress = True;";
-
         MonsterFilter monsterFilter;
         TooltipHandler toolTipHandler;
+        DBConnector dbConnector;
+        PopulateViews populateViews;
 
         string mainQueryString;
         string textBoxString;
         string additionalString;
         string fullQuery;
-        string monsterNameQuery;
         string secondaryQueryString;
-
-        SQLiteDataReader monsterInfo;
         public Form1()
         {
             InitializeComponent();
 
+            dbConnector = new DBConnector();
             monsterFilter = new MonsterFilter();
             toolTipHandler = new TooltipHandler();
+            populateViews = new PopulateViews();
 
             //pass the form's controls into the filters and tooltip classes for later manipulation
             foreach (Control control in Controls)
             {
-                if (control is CheckBox || control is RichTextBox)
+                if (control is CheckBox)
                 {
                     monsterFilter.controls.Add(control);
+                }
+                if(control is RichTextBox)
+                {
+                    RichTextBox rtfControl = (RichTextBox)control;
+                    if(rtfControl.ReadOnly == false)
+                    {
+                        monsterFilter.controls.Add(rtfControl);
+                    }
+                    else
+                    {
+                        populateViews.controls.Add(rtfControl);
+                    }
+                }
+                if(control is PictureBox)
+                {
+                    populateViews.controls.Add(control);
                 }
             }
             foreach(Control control in checklistBoxFlowPanel.Controls)
@@ -62,21 +75,7 @@ namespace Monster_LookUp
         private void TableUpdate(object sender, EventArgs e)
         {
             //create the query
-            GetData(QueryCompiler());
-
-            //so i can see the final query in the output
-            Debug.WriteLine(fullQuery);
-
-            //bind the new group of results to the datagridview data source
-            dataGridView1.DataSource = bindingSource1;
-
-            //these will keep the width of the displayed columns consistently the same upon every table update rather than resizing to fit the data
-            dataGridView1.Columns[0].Width = 100;
-            dataGridView1.Columns[1].Width = 100;
-            dataGridView1.Columns[2].Width = 100;
-            dataGridView1.Columns[3].Width = 100;
-            dataGridView1.Columns[4].Width = 100;
-            dataGridView1.Columns[5].Width = 100;
+            dataGridView1.DataSource = dbConnector.GrabData(QueryCompiler());
         }
 
         //compile a query out of constituent parts. a main query, the textbox search bar, and an additional string that is appended with conditionals
@@ -110,105 +109,13 @@ namespace Monster_LookUp
 
             return fullQuery = mainQueryString + secondaryQueryString + textBoxString + additionalString;
         }
-        //processes the query string itself
-        //NOTE TO SELF
-        //MAKE THIS WORK WITH EVERY INSTANCE OF NEEDING TO QUERY THE DB
-        private void GetData(string selectCommand)
-        {
-            try
-            {
-                // Specify a connection string.  
-                // Replace <SQL Server> with the SQL Server for your Northwind sample database.
-                // Replace "Integrated Security=True" with user login information if necessary.
-
-                // Create a new data adapter based on the specified query.
-                dataAdapter = new SQLiteDataAdapter(selectCommand, connectionString);
-
-                // Create a command builder to generate SQL update, insert, and
-                // delete commands based on selectCommand. 
-
-                // Populate a new data table and bind it to the BindingSource.
-                DataTable table = new DataTable
-                {
-                    Locale = CultureInfo.InvariantCulture
-                };
-                dataAdapter.Fill(table);
-                bindingSource1.DataSource = table;
-                // Resize the DataGridView columns to fit the newly loaded content.
-                dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
-            }
-            catch(SQLiteException)
-            {
-                //EAT DAT EXCEPTION BEEBEE
-            }
-        }
-
-        //pull monster data to the appropriate window based on the column name and the info grabbed from dataGridView1_CellClick_PopulateMonsterDat
-        private object GrabMonsterData_OnClick(string column)
-        {
-            object returnObject = null;
-                if (column == "image")
-                {
-                    returnObject = (Byte[])monsterInfo["image"];
-                }
-                else if (column == "action")
-                {
-                    string str = "";
-                    str += (string)monsterInfo["actionName"];
-                    if (monsterInfo["charges"] != DBNull.Value)
-                    {
-                        str += (string)monsterInfo["charges"];
-                    }
-                    if (monsterInfo["chargeRefreshRate"] != DBNull.Value)
-                    {
-                        str += (string)monsterInfo["chargeRefreshRate"];
-                    }
-                    str += (string)monsterInfo["actionDescription"];
-                    returnObject = str;
-                }
-                else
-                {
-                    returnObject = (string)monsterInfo[column];
-                }
-            return returnObject;
-        }
-
-        //create various SELECT commands to grab data to pass into the display boxes upon clicking the monster
         private void dataGridView1_CellClick_PopulateMonsterData(object sender, DataGridViewCellEventArgs e)
         {
+            populateViews.ImportMonsterName(dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value.ToString());
             //clear all text forms for displaying
-            foreach(Control rtf in this.Controls)
-            {
-                if (rtf is RichTextBox)
-                {
-                    RichTextBox rich = (RichTextBox)rtf;
-                    rich.ScrollToCaret();
-                    rich.Clear();
-                    if (pictureBox1.Image != null)
-                    {
-                        pictureBox1.Image.Dispose();
-                    }
-                }
-            }
-
-            //create a new connection, query for something specific like 'IMAGE' and put the data into the appropriate area for view via GrabMonsterData_OnClick
-            //gotta work on this a LOT
-            /*
-             * TO DO
-             * ADD ALL APPROPRIATE BOXES FOR DISPLAY
-             * ABSTRACT THEM TO METHODS TO CLEAN THIS AREA
-             * TRY TO MAKE ONE CONNECTION OPEN AND CLOSE INSTEAD OF MULTIPLE
-             * USE A PARSER FOR THE DIFFERENT DATA TYPES, I HAVE ONE FOR IMAGE, NOW NEED ONE FOR TEXT
-             * PARSER WILL USE GrabMonsterData_OnClick
-             */
-            SQLiteConnection connection = new SQLiteConnection(connectionString);
-            DataTable table = new DataTable();
-            monsterNameQuery = dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value.ToString();
-
-            SQLiteCommand command = new SQLiteCommand("SELECT image FROM monsters WHERE monsterName='" + monsterNameQuery + "'", connection);
-            connection.Open();
-            monsterInfo = command.ExecuteReader();
-            ParseMonsterImage(connection);
+            populateViews.Clear();
+            populateViews.IterateDisplayBoxes();
+            // SQLiteCommand command = new SQLiteCommand("SELECT image FROM monsters WHERE monsterName='" + monsterNameQuery + "'", connection);
 
             /*command.Connection = connection;
             monsterInfo = command.ExecuteReader();
@@ -221,25 +128,6 @@ namespace Monster_LookUp
             extrasBox.Rtf = (string)GrabMonsterData_OnClick("extras");
             connection.Close();*/
         }
-
-        //making sure this doesnt mess up if there is no image present
-        private void ParseMonsterImage(SQLiteConnection connection)
-        {
-            monsterInfo.Read();
-            Byte[] data = (Byte[])GrabMonsterData_OnClick("image");
-            MemoryStream mem = new MemoryStream();
-            if (data != null)
-            {
-                mem = new MemoryStream(data);
-                pictureBox1.Image = Image.FromStream(mem);
-            }
-            else
-            {
-                pictureBox1.Image = null;
-            }
-            connection.Close();
-        }
-
         //this method will loop through all lists previously placed into the monsterFilter class and clear them of their checkmarks/fields
         private void ClearButton_Click(object sender, EventArgs e)
         {

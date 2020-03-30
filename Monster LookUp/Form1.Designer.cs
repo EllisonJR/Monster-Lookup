@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -141,6 +142,7 @@
             // 
             // specialTraitsBox
             // 
+            this.specialTraitsBox.AccessibleDescription = resources.GetString("specialTraitsBox.AccessibleDescription");
             this.specialTraitsBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.specialTraitsBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.specialTraitsBox.Location = new System.Drawing.Point(624, 40);
@@ -153,6 +155,7 @@
             // 
             // actionsBox
             // 
+            this.actionsBox.AccessibleDescription = resources.GetString("actionsBox.AccessibleDescription");
             this.actionsBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.actionsBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionsBox.Location = new System.Drawing.Point(940, 40);
@@ -165,6 +168,9 @@
             // 
             // statBlockBox
             // 
+            this.statBlockBox.AccessibleDescription = "SELECT size, monsterType, monsterSubtype, armorClass, hitpointAverage, strength, " +
+    "dexterity, constitution, intelligence, wisdom, charisma, challengeRating FROM mo" +
+    "nsters WHERE monsterName = ";
             this.statBlockBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.statBlockBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statBlockBox.Location = new System.Drawing.Point(1582, 40);
@@ -222,6 +228,7 @@
             // 
             // regionalEffectsBox
             // 
+            this.regionalEffectsBox.AccessibleDescription = resources.GetString("regionalEffectsBox.AccessibleDescription");
             this.regionalEffectsBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.regionalEffectsBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.regionalEffectsBox.Location = new System.Drawing.Point(377, 546);
@@ -234,6 +241,7 @@
             // 
             // legendaryActionsBox
             // 
+            this.legendaryActionsBox.AccessibleDescription = resources.GetString("legendaryActionsBox.AccessibleDescription");
             this.legendaryActionsBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.legendaryActionsBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.legendaryActionsBox.Location = new System.Drawing.Point(745, 546);
@@ -279,6 +287,7 @@
             // 
             // lairActionsBox
             // 
+            this.lairActionsBox.AccessibleDescription = resources.GetString("lairActionsBox.AccessibleDescription");
             this.lairActionsBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lairActionsBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lairActionsBox.Location = new System.Drawing.Point(11, 546);
@@ -302,6 +311,7 @@
             // 
             // extrasBox
             // 
+            this.extrasBox.AccessibleDescription = "SELECT extras FROM monsters WHERE monsterName = ";
             this.extrasBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.extrasBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.extrasBox.Location = new System.Drawing.Point(1114, 546);
@@ -314,6 +324,7 @@
             // 
             // descriptionBox
             // 
+            this.descriptionBox.AccessibleDescription = "SELECT description FROM monsters where monsterName = ";
             this.descriptionBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.descriptionBox.Font = new System.Drawing.Font("Libre Baskerville", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.descriptionBox.Location = new System.Drawing.Point(1256, 40);
