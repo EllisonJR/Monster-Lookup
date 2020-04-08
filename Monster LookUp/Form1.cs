@@ -30,13 +30,12 @@ namespace Monster_LookUp
         public Form1()
         {
             InitializeComponent();
-
             dbConnector = new DBConnector();
             monsterFilter = new MonsterFilter();
             toolTipHandler = new TooltipHandler();
             populateViews = new PopulateViews();
 
-            //pass the form's controls into the filters and tooltip classes for later manipulation
+            //pass the form's controls into the filter, tooltip, populateviews classes for later manipulation
             foreach (Control control in Controls)
             {
                 if (control is CheckBox)
@@ -62,6 +61,7 @@ namespace Monster_LookUp
             }
             foreach(Control control in checklistBoxFlowPanel.Controls)
             {
+                //populate tooltips for the filter checklistboxes
                 monsterFilter.controls.Add(control);
                 toolTipHandler.controls.Add(control);
             }
@@ -78,12 +78,12 @@ namespace Monster_LookUp
             dataGridView1.DataSource = dbConnector.GrabData(QueryCompiler());
         }
 
-        //compile a query out of constituent parts. a main query, the textbox search bar, and an additional string that is appended with conditionals
+        //querycompiler compile a query out of constituent parts. a main query, the textbox search bar, and an additional string that is appended with conditionals
         private string QueryCompiler()
         {
             //set the main query to what will be displayed
             //then append the textbox string which will allow for searching anything plus what is currently typed in the box
-            mainQueryString = "SELECT DISTINCT mons.monsterName, mons.challengeRating, mons.armorClass, mons.hitpointAverage, mons.monsterType, mons.size ";
+            mainQueryString = "SELECT DISTINCT mons.monsterName, CASE mons.challengeRating WHEN 0.125 then '1/8' WHEN 0.25 then '1/4' WHEN 0.5 then '1/2' else mons.challengeRating END challengeRating, mons.armorClass, mons.hitpointAverage, mons.monsterType, mons.size ";
             secondaryQueryString = "FROM Monsters AS mons " +
                 "LEFT JOIN monsters_actions AS mons_actions ON mons_actions.monsterName = mons.monsterName " +
                 "LEFT JOIN monsters_immunities AS mons_immunities ON mons_immunities.monsterName = mons.monstername " +
@@ -114,7 +114,7 @@ namespace Monster_LookUp
             populateViews.ImportMonsterName(dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value.ToString());
             //clear all text forms for displaying
             populateViews.Clear();
-            populateViews.IterateDisplayBoxes();
+            populateViews.IterateDataTables();
             // SQLiteCommand command = new SQLiteCommand("SELECT image FROM monsters WHERE monsterName='" + monsterNameQuery + "'", connection);
 
             /*command.Connection = connection;

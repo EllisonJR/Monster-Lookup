@@ -112,6 +112,7 @@ namespace Monster_LookUp
                     }
                 }
             }
+
             if(passedInControl is CheckBox)
             {
                 CheckBox checkbox = (CheckBox)passedInControl;
